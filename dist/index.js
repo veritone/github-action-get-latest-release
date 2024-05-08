@@ -9498,6 +9498,7 @@ const octokit = (() => {
 
 async function run() {
     try {
+        core.info("Hello!")
         if (repository){
                 [owner, repo] = repository.split("/");
         }
