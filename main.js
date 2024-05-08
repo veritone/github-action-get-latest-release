@@ -42,7 +42,8 @@ async function run() {
                 core.setOutput('release', releases[0].tag_name);
                 core.setOutput('id', String(releases[0].id));
                 core.setOutput('description', String(releases[0].body));
-                break;
+                core.info("output has been set");
+                return;
             }
         }
         core.info("fail");
