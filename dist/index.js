@@ -9511,7 +9511,8 @@ async function run() {
           )) {
             core.info("response: " + response)
             releases = response.data;
-            core.info(releases.length)
+            core.info("length: " + releases.length)
+            core.info("bye!")
             if (excludes.includes('prerelease')) {
                 releases = releases.filter(x => !(x.prerelease == true));
             }
