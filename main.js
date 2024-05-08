@@ -27,12 +27,13 @@ async function run() {
                 repo: repo
             }
           )) {
+            core.info("response: " + response)
             releases = response.data;
             if (excludes.includes('prerelease')) {
-              releases = releases.filter(x => !(x.prerelease == true));
-          }
-          if (excludes.includes('draft')) {
-              releases = releases.filter(x => !(x.draft == true));
+                releases = releases.filter(x => !(x.prerelease == true));
+            }
+            if (excludes.includes('draft')) {
+                releases = releases.filter(x => !(x.draft == true));
             }
             if (releases.length) {
                 core.setOutput('release', releases[0].tag_name);
