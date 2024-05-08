@@ -30911,24 +30911,28 @@ async function run() {
         if (repository){
                 [owner, repo] = repository.split("/");
         }
-        var releases  = await octokit.repos.listReleases({
-            owner: owner,
-            repo: repo,
-            });
-        releases = releases.data;
-        if (excludes.includes('prerelease')) {
-            releases = releases.filter(x => x.prerelease != true);
+        for await (const response of octokit.paginate.iterator(
+            octokit.repos.listReleases,
+            {
+                owner: owner,
+                repo: repo
+            }
+          )) {
+            releases = response.data;
+            if (excludes.includes('prerelease')) {
+                releases = releases.filter(x => x.prerelease != true);
+            }
+            if (excludes.includes('draft')) {
+                releases = releases.filter(x => x.draft != true);
+            }
+            if (releases.length) {
+                core.setOutput('release', releases[0].tag_name);
+                core.setOutput('id', String(releases[0].id));
+                core.setOutput('description', String(releases[0].body));
+                break;
+            }
         }
-        if (excludes.includes('draft')) {
-            releases = releases.filter(x => x.draft != true);
-        }
-        if (releases.length) {
-            core.setOutput('release', releases[0].tag_name);
-            core.setOutput('id', String(releases[0].id));
-            core.setOutput('description', String(releases[0].body));
-        } else {
-            core.setFailed("No valid releases");
-        }
+        core.setFailed("No valid releases");
     }
     catch (error) {
         core.setFailed(error.message);
