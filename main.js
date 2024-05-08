@@ -20,6 +20,10 @@ async function run() {
         if (repository){
                 [owner, repo] = repository.split("/");
         }
+        console.log("repository: " + repository)
+        console.log("owner: " + owner)
+        console.log("repo: " + repo)
+        console.log("Calling API...")
         for await (const response of octokit.paginate.iterator(
             octokit.repos.listReleases,
             {
@@ -27,6 +31,7 @@ async function run() {
                 repo: repo
             }
           )) {
+            console.log("Response: " + response)
             releases = response.data;
             if (excludes.includes('prerelease')) {
                 releases = releases.filter(x => x.prerelease != true);
