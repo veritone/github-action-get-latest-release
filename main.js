@@ -17,7 +17,6 @@ const octokit = (() => {
 
 async function run() {
     try {
-        core.info("Hello!")
         if (repository){
                 [owner, repo] = repository.split("/");
         }
@@ -28,10 +27,7 @@ async function run() {
                 repo: repo
             }
           )) {
-            core.info("response: " + response);
             releases = response.data;
-            core.info("length: " + releases.length);
-            core.info("bye!");
             if (excludes.includes('prerelease')) {
                 releases = releases.filter(x => !(x.prerelease == true));
             }
@@ -42,11 +38,9 @@ async function run() {
                 core.setOutput('release', releases[0].tag_name);
                 core.setOutput('id', String(releases[0].id));
                 core.setOutput('description', String(releases[0].body));
-                core.info("output has been set");
                 return;
             }
         }
-        core.info("fail");
         core.setFailed("No valid releases.");
     }
     catch (error) {
