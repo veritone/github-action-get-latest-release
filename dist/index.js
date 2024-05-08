@@ -9509,10 +9509,10 @@ async function run() {
                 repo: repo
             }
           )) {
-            core.info("response: " + response)
+            core.info("response: " + response);
             releases = response.data;
-            core.info("length: " + releases.length)
-            core.info("bye!")
+            core.info("length: " + releases.length);
+            core.info("bye!");
             if (excludes.includes('prerelease')) {
                 releases = releases.filter(x => !(x.prerelease == true));
             }
@@ -9526,6 +9526,7 @@ async function run() {
                 break;
             }
         }
+        core.info("fail");
         core.setFailed("No valid releases.");
     }
     catch (error) {
